@@ -9,7 +9,6 @@ public class RejectLoanBookDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        String bookTitle = (String) execution.getVariable("title");
-        log.info("Loan Rejected: {}", bookTitle);
+        log.info("No book title provided, loan Rejected");
     }
 }

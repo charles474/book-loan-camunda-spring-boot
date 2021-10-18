@@ -22,7 +22,7 @@
       <bpmn:outgoing>Flow_114dsmy</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0ibt9yz" sourceRef="book-stock-check" targetRef="Gateway_1xh4778" />
-    <bpmn:serviceTask id="book-stock-check" name="Check Book Stock" camunda:class="com.example.camunda.book.loan.delegate.BookStockCheckerDelegate">
+    <bpmn:serviceTask id="book-stock-check" name="Check Book Stock" camunda:class="com.example.camunda.book.loan.delegate.StockCheckerDelegate">
       <bpmn:incoming>Flow_1dgia5y</bpmn:incoming>
       <bpmn:outgoing>Flow_0ibt9yz</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -57,6 +57,22 @@
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="book-loan-process">
+      <bpmndi:BPMNEdge id="Flow_031gx28_di" bpmnElement="Flow_031gx28">
+        <di:waypoint x="860" y="230" />
+        <di:waypoint x="942" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19s7luq_di" bpmnElement="Flow_19s7luq">
+        <di:waypoint x="860" y="330" />
+        <di:waypoint x="942" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0l7k2nh_di" bpmnElement="Flow_0l7k2nh">
+        <di:waypoint x="630" y="142" />
+        <di:waypoint x="630" y="230" />
+        <di:waypoint x="760" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="652.9999999999998" y="301" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1k5j245_di" bpmnElement="Flow_1k5j245">
         <di:waypoint x="290" y="142" />
         <di:waypoint x="290" y="330" />
@@ -67,21 +83,13 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dgia5y_di" bpmnElement="Flow_1dgia5y">
         <di:waypoint x="315" y="117" />
-        <di:waypoint x="430" y="117" />
+        <di:waypoint x="420" y="117" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="333" y="99" width="68" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0l7k2nh_di" bpmnElement="Flow_0l7k2nh">
-        <di:waypoint x="630" y="142" />
-        <di:waypoint x="630" y="230" />
-        <di:waypoint x="760" y="230" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="652.9999999999998" y="301" width="65" height="14" />
+          <dc:Bounds x="328" y="99" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ibt9yz_di" bpmnElement="Flow_0ibt9yz">
-        <di:waypoint x="530" y="117" />
+        <di:waypoint x="520" y="117" />
         <di:waypoint x="605" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_114dsmy_di" bpmnElement="Flow_114dsmy">
@@ -99,14 +107,6 @@
         <di:waypoint x="178" y="117" />
         <di:waypoint x="265" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19s7luq_di" bpmnElement="Flow_19s7luq">
-        <di:waypoint x="860" y="330" />
-        <di:waypoint x="942" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_031gx28_di" bpmnElement="Flow_031gx28">
-        <di:waypoint x="860" y="230" />
-        <di:waypoint x="942" y="230" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="book-loan-request">
         <dc:Bounds x="142" y="99" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -122,22 +122,22 @@
           <dc:Bounds x="922" y="136" width="76" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1hs0mmv_di" bpmnElement="Gateway_1selps7" isMarkerVisible="true">
-        <dc:Bounds x="265" y="92" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1n9rzln_di" bpmnElement="loan-book">
         <dc:Bounds x="760" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_08lh44a_di" bpmnElement="Event_08lh44a">
-        <dc:Bounds x="942" y="212" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="922" y="255" width="76" height="27" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Gateway_1hs0mmv_di" bpmnElement="Gateway_1selps7" isMarkerVisible="true">
+        <dc:Bounds x="265" y="92" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1c2vc7t_di" bpmnElement="Event_1c2vc7t">
         <dc:Bounds x="942" y="312" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="922" y="355" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08lh44a_di" bpmnElement="Event_08lh44a">
+        <dc:Bounds x="942" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="922" y="255" width="76" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_18yvy76_di" bpmnElement="Activity_18yvy76">
@@ -147,7 +147,7 @@
         <dc:Bounds x="760" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0646pij_di" bpmnElement="book-stock-check">
-        <dc:Bounds x="430" y="77" width="100" height="80" />
+        <dc:Bounds x="420" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

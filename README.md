@@ -26,10 +26,11 @@ do some logic and logging to show if a book has been loaned, out of stock or rej
 
 The process in this case is simple, it will look at the `title` value coming from an external web request and:
 * If the title is not empty, it will perform a search in the in-memory database for a requested book.
+  * If the requested book is found and is in stock, a message is displayed.
+  * If the requested book is found and is no longer in stock, a message is displayed.
 * If the title is empty, it will reject the book loan.
-* If the requested book is found and is no longer in stock, a message is displayed.
 
-Java Delegates are used for some of the business logic rather than a decision tabe.
+Java Delegates are used for some business logic rather than a decision table.
 
 This repository exposes a URL endpoint for receiving a request using an API application like [**Postman**](https://www.postman.com/)
 

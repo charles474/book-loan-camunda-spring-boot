@@ -2,7 +2,7 @@ package com.example.camunda.book.loan.config;
 
 import com.example.camunda.book.loan.BookLoanProcess;
 import com.example.camunda.book.loan.bpmn.BpmnProcessor;
-import com.example.camunda.book.loan.delegate.BookStockCheckerDelegate;
+import com.example.camunda.book.loan.delegate.StockCheckerDelegate;
 import com.example.camunda.book.loan.delegate.LoanBookDelegate;
 import com.example.camunda.book.loan.model.Book;
 import com.example.camunda.book.loan.repository.BookRepository;
@@ -31,8 +31,8 @@ public class Config {
     }
 
     @Bean
-    public BookStockCheckerDelegate getBookStockChecker(BookRepository bookRepository){
-        return new BookStockCheckerDelegate(bookRepository);
+    public StockCheckerDelegate getBookStockChecker(BookRepository bookRepository){
+        return new StockCheckerDelegate(bookRepository);
     }
 
     @Bean
@@ -44,9 +44,9 @@ public class Config {
     public CommandLineRunner commandLineRunner (BookRepository bookRepository){
         // Pre-populate our in-memory DB
         return args -> {
-            Book aliceInWonderland= new Book("Alice In Wonderland", 1);
-            Book oliverTwist = new Book("Oliver Twist", 1);
-            Book aTaleOfTwoCities= new Book("A Tale Of Two Cities", 1);
+            Book aliceInWonderland= new Book("Alice In Wonderland", 3);
+            Book oliverTwist = new Book("Oliver Twist", 2);
+            Book aTaleOfTwoCities= new Book("A Tale Of Two Cities", 5);
             bookRepository.save(aliceInWonderland);
             bookRepository.save(oliverTwist);
             bookRepository.save(aTaleOfTwoCities);

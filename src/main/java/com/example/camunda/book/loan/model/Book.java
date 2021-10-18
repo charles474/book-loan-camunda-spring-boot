@@ -19,11 +19,11 @@ public class Book {
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private Integer available;
+    private Integer bookCount;
 
-    public Book(String title, Integer available){
+    public Book(String title, Integer bookCount){
         this.title = title;
-        this.available = available;
+        this.bookCount = bookCount;
     }
 
 }
