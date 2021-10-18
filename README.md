@@ -34,6 +34,18 @@ Java Delegates are used for some business logic rather than a decision table.
 
 This repository exposes a URL endpoint for receiving a request using an API application like [**Postman**](https://www.postman.com/)
 
+### Sending a request
+
+---
+
+Send a http `POST` request to `http://localhost:8080/v1/loanBook` with a `JSON` request body as shown below:
+```json
+{
+  "title": "Alice In Wonderland"
+}
+```
+
+
 ### Running locally
 
 ---
