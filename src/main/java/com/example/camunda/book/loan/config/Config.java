@@ -2,8 +2,8 @@ package com.example.camunda.book.loan.config;
 
 import com.example.camunda.book.loan.BookLoanProcess;
 import com.example.camunda.book.loan.bpmn.BpmnProcessor;
-import com.example.camunda.book.loan.delegate.StockCheckerDelegate;
 import com.example.camunda.book.loan.delegate.LoanBookDelegate;
+import com.example.camunda.book.loan.delegate.StockCheckerDelegate;
 import com.example.camunda.book.loan.model.Book;
 import com.example.camunda.book.loan.repository.BookRepository;
 import com.example.camunda.book.loan.utils.VariableUtils;
@@ -31,7 +31,7 @@ public class Config {
     }
 
     @Bean
-    public StockCheckerDelegate getBookStockChecker(BookRepository bookRepository){
+    public StockCheckerDelegate getStockCheckerDelegate(BookRepository bookRepository){
         return new StockCheckerDelegate(bookRepository);
     }
 

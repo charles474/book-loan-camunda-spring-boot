@@ -37,7 +37,9 @@
     <bpmn:endEvent id="Event_1c2vc7t" name="End Book Loan Request">
       <bpmn:incoming>Flow_19s7luq</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1k5j245" name="Title Not Provided" sourceRef="Gateway_1selps7" targetRef="Activity_18yvy76" />
+    <bpmn:sequenceFlow id="Flow_1k5j245" name="Title Not Provided" sourceRef="Gateway_1selps7" targetRef="Activity_18yvy76">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${empty title}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0l7k2nh" name="Not Available" sourceRef="Gateway_1xh4778" targetRef="Activity_146znvf">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!available}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -125,6 +127,9 @@
       <bpmndi:BPMNShape id="Activity_1n9rzln_di" bpmnElement="loan-book">
         <dc:Bounds x="760" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0646pij_di" bpmnElement="book-stock-check">
+        <dc:Bounds x="420" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1hs0mmv_di" bpmnElement="Gateway_1selps7" isMarkerVisible="true">
         <dc:Bounds x="265" y="92" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -145,9 +150,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_146znvf_di" bpmnElement="Activity_146znvf">
         <dc:Bounds x="760" y="190" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0646pij_di" bpmnElement="book-stock-check">
-        <dc:Bounds x="420" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
