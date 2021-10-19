@@ -1,14 +1,17 @@
 package com.example.camunda.book.loan;
 
+import com.example.camunda.book.loan.delegate.StockCheckerDelegate;
 import com.example.camunda.book.loan.model.Book;
 import com.example.camunda.book.loan.repository.BookRepository;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 import org.camunda.bpm.engine.test.Deployment;
+import org.camunda.bpm.engine.test.mock.Mocks;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.extension.junit5.test.ProcessEngineExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,19 +40,25 @@ class BookLoanCamundaSpringBootApplicationTest {
 
     private final ProcessEngine processEngine = processEngineExtension.getProcessEngine();
     private final RuntimeService runtimeService = processEngine.getRuntimeService();
+
     @Autowired
     private BookRepository bookRepository;
+
+    @BeforeEach
+    public void setUp(){
+        List<Book> bookList = Arrays.asList(
+                new Book("Alice In Wonderland", 1),
+                new Book("Oliver Twist", 1)
+        );
+        bookRepository.saveAll(bookList);
+        Mocks.register("stockCheckerDelegate", new StockCheckerDelegate(bookRepository));
+    }
 
     @ParameterizedTest
     @MethodSource("bookToLoans")
     @Deployment(resources = {"book-loan.bpmn"})
     public void shouldAcceptBookLoans(String title){
         // Given
-        List<Book> bookList = Arrays.asList(
-                new Book("Alice In Wonderland", 1),
-                new Book("Oliver Twist", 1)
-        );
-        bookRepository.saveAll(bookList);
         VariableMap variableMap = buildVariables(title);
 
         // When
@@ -62,7 +71,6 @@ class BookLoanCamundaSpringBootApplicationTest {
         // Then
         assertThat(process).isEnded();
     }
-
 
     private static Stream<Arguments> bookToLoans(){
         return Stream.of(
