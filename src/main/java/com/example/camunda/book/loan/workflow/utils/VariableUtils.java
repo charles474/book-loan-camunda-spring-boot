@@ -1,6 +1,6 @@
-package com.example.camunda.book.loan.utils;
+package com.example.camunda.book.loan.workflow.utils;
 
-import com.example.camunda.book.loan.model.Book;
+import com.example.camunda.book.loan.workflow.model.Book;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.Variables;
 

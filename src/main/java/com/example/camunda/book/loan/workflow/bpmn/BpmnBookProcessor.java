@@ -1,18 +1,18 @@
-package com.example.camunda.book.loan.bpmn;
+package com.example.camunda.book.loan.workflow.bpmn;
 
-import com.example.camunda.book.loan.model.Book;
-import com.example.camunda.book.loan.utils.VariableUtils;
+import com.example.camunda.book.loan.workflow.model.Book;
+import com.example.camunda.book.loan.workflow.utils.VariableUtils;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.variable.VariableMap;
 
-import static com.example.camunda.book.loan.bpmn.ProcessInstance.LOAN_BOOK_PROCESS_INSTANCE;
+import static com.example.camunda.book.loan.workflow.model.ProcessInstance.LOAN_BOOK_PROCESS_INSTANCE;
 
-public class BpmnProcessor {
+public class BpmnBookProcessor {
 
     private final RuntimeService runtimeService;
     private final VariableUtils variableUtils;
 
-    public BpmnProcessor(RuntimeService runtimeService, VariableUtils variableUtils) {
+    public BpmnBookProcessor(RuntimeService runtimeService, VariableUtils variableUtils) {
         this.runtimeService = runtimeService;
         this.variableUtils = variableUtils;
     }
@@ -23,4 +23,5 @@ public class BpmnProcessor {
                 .setVariables(variableMap)
                 .execute();
     }
+
 }

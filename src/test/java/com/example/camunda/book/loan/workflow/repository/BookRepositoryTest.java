@@ -1,7 +1,7 @@
-package com.example.camunda.book.loan.repository;
+package com.example.camunda.book.loan.workflow.repository;
 
 import com.example.camunda.book.loan.BookLoanCamundaSpringBootApplication;
-import com.example.camunda.book.loan.model.Book;
+import com.example.camunda.book.loan.workflow.model.Book;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

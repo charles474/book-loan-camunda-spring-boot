@@ -1,6 +1,6 @@
-package com.example.camunda.book.loan.controller;
+package com.example.camunda.book.loan.workflow.controller;
 
-import com.example.camunda.book.loan.model.Book;
+import com.example.camunda.book.loan.workflow.model.Book;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

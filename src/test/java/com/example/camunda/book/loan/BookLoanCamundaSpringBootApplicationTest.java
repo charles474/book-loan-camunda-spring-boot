@@ -1,16 +1,15 @@
 package com.example.camunda.book.loan;
 
-import com.example.camunda.book.loan.delegate.StockCheckerDelegate;
-import com.example.camunda.book.loan.model.Book;
-import com.example.camunda.book.loan.repository.BookRepository;
+import com.example.camunda.book.loan.workflow.model.Book;
+import com.example.camunda.book.loan.workflow.repository.BookRepository;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.mock.Mocks;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.extension.junit5.test.ProcessEngineExtension;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -26,12 +25,15 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
+import static org.camunda.bpm.extension.mockito.CamundaMockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BookLoanCamundaSpringBootApplication.class)
 class BookLoanCamundaSpringBootApplicationTest {
 
     private final String LOAN_BOOK_PROCESS_INSTANCE = "book-loan-process";
+    private final String END_ID = "end-loan-request";
+    private final String STOCK_CHECKER_DELEGATE_NAME = "stockChecker";
 
     @RegisterExtension
     public ProcessEngineExtension processEngineExtension = ProcessEngineExtension.builder()
@@ -48,40 +50,44 @@ class BookLoanCamundaSpringBootApplicationTest {
     public void setUp(){
         List<Book> bookList = Arrays.asList(
                 new Book("Alice In Wonderland", 1),
-                new Book("Oliver Twist", 1)
+                new Book("Oliver Twist", 1),
+                new Book("A Tale of Two Cities", 0)
         );
         bookRepository.saveAll(bookList);
-        Mocks.register("stockCheckerDelegate", new StockCheckerDelegate(bookRepository));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        reset();
     }
 
     @ParameterizedTest
-    @MethodSource("bookToLoans")
+    @MethodSource("autoBookLoans")
     @Deployment(resources = {"book-loan.bpmn"})
-    public void shouldAcceptBookLoans(String title){
+    public void shouldAcceptBookLoansAndExecuteProvidedDelegates(String title, String expectedDelegateName, boolean availability){
         // Given
-        VariableMap variableMap = buildVariables(title);
+        registerJavaDelegateMock(STOCK_CHECKER_DELEGATE_NAME);
+        registerJavaDelegateMock(expectedDelegateName);
+        VariableMap variableMap = Variables.createVariables()
+                .putValue("title", title)
+                .putValue("available", availability);
 
         // When
-        ProcessInstanceWithVariables process = runtimeService.createProcessInstanceByKey(LOAN_BOOK_PROCESS_INSTANCE)
-                .setVariables(variableMap)
-                .executeWithVariablesInReturn();
-
-        //TODO: creation of StockCheckerDelegate instance throws exception.
+        ProcessInstance process = runtimeService.startProcessInstanceByKey(LOAN_BOOK_PROCESS_INSTANCE, variableMap);
 
         // Then
-        assertThat(process).isEnded();
+        assertThat(process).hasNotPassed(END_ID);
+        verifyJavaDelegateMock(STOCK_CHECKER_DELEGATE_NAME).executed();
+        verifyJavaDelegateMock(expectedDelegateName).executed();
     }
 
-    private static Stream<Arguments> bookToLoans(){
+
+    public static Stream<Arguments> autoBookLoans() {
         return Stream.of(
-                Arguments.of("Alice In Wonderland"),
-                Arguments.of("Oliver Twist")
+                Arguments.of("Alice In Wonderland", "loanBook", true),
+                Arguments.of("Oliver Twist", "loanBook", true),
+                Arguments.of("A Tale of Two Cities", "outOfStock", false)
         );
-    }
-
-    private VariableMap buildVariables(String title){
-        return Variables.createVariables()
-                .putValue("title", title);
     }
 
 }

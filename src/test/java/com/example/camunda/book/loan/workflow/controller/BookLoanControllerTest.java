@@ -1,4 +1,4 @@
-package com.example.camunda.book.loan.controller;
+package com.example.camunda.book.loan.workflow.controller;
 
 import com.example.camunda.book.loan.BookLoanCamundaSpringBootApplication;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ class BookLoanControllerTest {
     private BookLoanController controller;
 
     @Test
-    public void contextLoads(){
+    public void shouldCheckThatControllerInstanceIsNotNull(){
         assertThat(controller).isNotNull();
     }
 

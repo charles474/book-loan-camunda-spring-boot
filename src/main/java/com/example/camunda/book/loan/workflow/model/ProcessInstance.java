@@ -1,4 +1,4 @@
-package com.example.camunda.book.loan.bpmn;
+package com.example.camunda.book.loan.workflow.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

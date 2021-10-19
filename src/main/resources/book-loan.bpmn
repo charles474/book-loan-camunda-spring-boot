@@ -13,16 +13,18 @@
     <bpmn:sequenceFlow id="Flow_16nhx5o" name="Available" sourceRef="Gateway_1xh4778" targetRef="loan-book">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${available}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:endEvent id="Event_17oz9pi" name="End Book Loan Request">
+    <bpmn:endEvent id="end-loan-request" name="End Book Loan Request">
       <bpmn:incoming>Flow_114dsmy</bpmn:incoming>
+      <bpmn:incoming>Flow_1xkomvm</bpmn:incoming>
+      <bpmn:incoming>Flow_0uduzl0</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_114dsmy" sourceRef="loan-book" targetRef="Event_17oz9pi" />
-    <bpmn:serviceTask id="loan-book" name="Loan Book" camunda:class="com.example.camunda.book.loan.delegate.LoanBookDelegate">
+    <bpmn:sequenceFlow id="Flow_114dsmy" sourceRef="loan-book" targetRef="end-loan-request" />
+    <bpmn:serviceTask id="loan-book" name="Loan Book" camunda:delegateExpression="#{loanBook}">
       <bpmn:incoming>Flow_16nhx5o</bpmn:incoming>
       <bpmn:outgoing>Flow_114dsmy</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0ibt9yz" sourceRef="book-stock-check" targetRef="Gateway_1xh4778" />
-    <bpmn:serviceTask id="book-stock-check" name="Check Book Stock" camunda:class="com.example.camunda.book.loan.delegate.StockCheckerDelegate">
+    <bpmn:serviceTask id="book-stock-check" name="Check Book Stock" camunda:delegateExpression="#{stockChecker}">
       <bpmn:incoming>Flow_1dgia5y</bpmn:incoming>
       <bpmn:outgoing>Flow_0ibt9yz</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -34,53 +36,39 @@
       <bpmn:outgoing>Flow_1dgia5y</bpmn:outgoing>
       <bpmn:outgoing>Flow_1k5j245</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="Event_1c2vc7t" name="End Book Loan Request">
-      <bpmn:incoming>Flow_19s7luq</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1k5j245" name="Title Not Provided" sourceRef="Gateway_1selps7" targetRef="Activity_18yvy76">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${empty title}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0l7k2nh" name="Not Available" sourceRef="Gateway_1xh4778" targetRef="Activity_146znvf">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!available}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:endEvent id="Event_08lh44a" name="End Book Loan Request">
-      <bpmn:incoming>Flow_031gx28</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_18yvy76" name="Reject Book Loan" camunda:class="com.example.camunda.book.loan.delegate.RejectLoanBookDelegate">
+    <bpmn:serviceTask id="Activity_18yvy76" name="Reject Book Loan" camunda:delegateExpression="#{rejectLoan}">
       <bpmn:incoming>Flow_1k5j245</bpmn:incoming>
-      <bpmn:outgoing>Flow_19s7luq</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0uduzl0</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_19s7luq" sourceRef="Activity_18yvy76" targetRef="Event_1c2vc7t" />
-    <bpmn:serviceTask id="Activity_146znvf" name="Out Of Stock" camunda:class="com.example.camunda.book.loan.delegate.OutOfStockDelegate">
+    <bpmn:serviceTask id="Activity_146znvf" name="Out Of Stock" camunda:delegateExpression="#{outOfStock}">
       <bpmn:incoming>Flow_0l7k2nh</bpmn:incoming>
-      <bpmn:outgoing>Flow_031gx28</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1xkomvm</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_031gx28" sourceRef="Activity_146znvf" targetRef="Event_08lh44a" />
+    <bpmn:sequenceFlow id="Flow_1xkomvm" sourceRef="Activity_146znvf" targetRef="end-loan-request" />
+    <bpmn:sequenceFlow id="Flow_0uduzl0" sourceRef="Activity_18yvy76" targetRef="end-loan-request" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="book-loan-process">
-      <bpmndi:BPMNEdge id="Flow_031gx28_di" bpmnElement="Flow_031gx28">
-        <di:waypoint x="860" y="230" />
-        <di:waypoint x="942" y="230" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19s7luq_di" bpmnElement="Flow_19s7luq">
-        <di:waypoint x="860" y="330" />
-        <di:waypoint x="942" y="330" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0l7k2nh_di" bpmnElement="Flow_0l7k2nh">
         <di:waypoint x="630" y="142" />
         <di:waypoint x="630" y="230" />
         <di:waypoint x="760" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="652.9999999999998" y="301" width="65" height="14" />
+          <dc:Bounds x="668" y="213" width="65" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1k5j245_di" bpmnElement="Flow_1k5j245">
         <di:waypoint x="290" y="142" />
-        <di:waypoint x="290" y="330" />
-        <di:waypoint x="760" y="330" />
+        <di:waypoint x="290" y="350" />
+        <di:waypoint x="760" y="350" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="466" y="313" width="88" height="14" />
+          <dc:Bounds x="466" y="333" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dgia5y_di" bpmnElement="Flow_1dgia5y">
@@ -109,6 +97,18 @@
         <di:waypoint x="178" y="117" />
         <di:waypoint x="265" y="117" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xkomvm_di" bpmnElement="Flow_1xkomvm">
+        <di:waypoint x="860" y="230" />
+        <di:waypoint x="901" y="230" />
+        <di:waypoint x="901" y="117" />
+        <di:waypoint x="942" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0uduzl0_di" bpmnElement="Flow_0uduzl0">
+        <di:waypoint x="860" y="350" />
+        <di:waypoint x="901" y="350" />
+        <di:waypoint x="901" y="117" />
+        <di:waypoint x="942" y="117" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="book-loan-request">
         <dc:Bounds x="142" y="99" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -118,14 +118,11 @@
       <bpmndi:BPMNShape id="Gateway_1xh4778_di" bpmnElement="Gateway_1xh4778" isMarkerVisible="true">
         <dc:Bounds x="605" y="92" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_17oz9pi_di" bpmnElement="Event_17oz9pi">
+      <bpmndi:BPMNShape id="Event_17oz9pi_di" bpmnElement="end-loan-request">
         <dc:Bounds x="942" y="99" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="922" y="136" width="76" height="27" />
+          <dc:Bounds x="922" y="62" width="76" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1n9rzln_di" bpmnElement="loan-book">
-        <dc:Bounds x="760" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0646pij_di" bpmnElement="book-stock-check">
         <dc:Bounds x="420" y="77" width="100" height="80" />
@@ -133,23 +130,14 @@
       <bpmndi:BPMNShape id="Gateway_1hs0mmv_di" bpmnElement="Gateway_1selps7" isMarkerVisible="true">
         <dc:Bounds x="265" y="92" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1c2vc7t_di" bpmnElement="Event_1c2vc7t">
-        <dc:Bounds x="942" y="312" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="922" y="355" width="76" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_08lh44a_di" bpmnElement="Event_08lh44a">
-        <dc:Bounds x="942" y="212" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="922" y="255" width="76" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_18yvy76_di" bpmnElement="Activity_18yvy76">
-        <dc:Bounds x="760" y="290" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_146znvf_di" bpmnElement="Activity_146znvf">
         <dc:Bounds x="760" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1n9rzln_di" bpmnElement="loan-book">
+        <dc:Bounds x="760" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18yvy76_di" bpmnElement="Activity_18yvy76">
+        <dc:Bounds x="760" y="310" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
