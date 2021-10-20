@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0lwpdnh" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="book-return-process" name="Book Return Process" isExecutable="true">
+    <bpmn:startEvent id="return-book-loan" name="Start Book Return">
+      <bpmn:outgoing>Flow_023yu8v</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_023yu8v" sourceRef="return-book-loan" targetRef="book-return-approval" />
+    <bpmn:userTask id="book-return-approval" name="Approve Book Return" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="approved" label="Approved Return" type="boolean" />
+          <camunda:formField id="title" label="Title" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_023yu8v</bpmn:incoming>
+      <bpmn:incoming>Flow_0og43tm</bpmn:incoming>
+      <bpmn:outgoing>Flow_1n0orus</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1dzrjz5">
+      <bpmn:incoming>Flow_1n0orus</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wzfu9v</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0og43tm</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1n0orus" sourceRef="book-return-approval" targetRef="Gateway_1dzrjz5" />
+    <bpmn:endEvent id="Event_1t36u59" name="End Return Process">
+      <bpmn:incoming>Flow_0yap36t</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0wzfu9v" name="Approved Return" sourceRef="Gateway_1dzrjz5" targetRef="Activity_11xtypy">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0og43tm" name="Unapproved Return" sourceRef="Gateway_1dzrjz5" targetRef="book-return-approval">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!approved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0yap36t" sourceRef="Activity_11xtypy" targetRef="Event_1t36u59" />
+    <bpmn:serviceTask id="Activity_11xtypy" name="Perform Book Return" camunda:delegateExpression="#{returnBook}">
+      <bpmn:incoming>Flow_0wzfu9v</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yap36t</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="book-return-process">
+      <bpmndi:BPMNEdge id="Flow_023yu8v_di" bpmnElement="Flow_023yu8v">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="320" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1n0orus_di" bpmnElement="Flow_1n0orus">
+        <di:waypoint x="420" y="117" />
+        <di:waypoint x="525" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wzfu9v_di" bpmnElement="Flow_0wzfu9v">
+        <di:waypoint x="575" y="117" />
+        <di:waypoint x="710" y="117" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="598" y="99" width="83" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0og43tm_di" bpmnElement="Flow_0og43tm">
+        <di:waypoint x="550" y="142" />
+        <di:waypoint x="550" y="220" />
+        <di:waypoint x="370" y="220" />
+        <di:waypoint x="370" y="157" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="430" y="190" width="61" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yap36t_di" bpmnElement="Flow_0yap36t">
+        <di:waypoint x="810" y="117" />
+        <di:waypoint x="1072" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="return-book-loan">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="153" y="142" width="88" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mrrx21_di" bpmnElement="book-return-approval">
+        <dc:Bounds x="320" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1dzrjz5_di" bpmnElement="Gateway_1dzrjz5" isMarkerVisible="true">
+        <dc:Bounds x="525" y="92" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1t36u59_di" bpmnElement="Event_1t36u59">
+        <dc:Bounds x="1072" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1062" y="142" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qpm5uw_di" bpmnElement="Activity_11xtypy">
+        <dc:Bounds x="710" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

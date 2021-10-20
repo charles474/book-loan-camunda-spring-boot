@@ -6,7 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ProcessInstance {
 
-    LOAN_BOOK_PROCESS_INSTANCE("book-loan-process");
+    LOAN_BOOK_PROCESS_INSTANCE("book-loan-process"),
+    RETURN_BOOK_PROCESS_INSTANCE("book-return-process");
 
     @Getter
     private String name;

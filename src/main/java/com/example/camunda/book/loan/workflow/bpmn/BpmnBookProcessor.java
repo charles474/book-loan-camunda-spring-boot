@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.variable.VariableMap;
 
 import static com.example.camunda.book.loan.workflow.model.ProcessInstance.LOAN_BOOK_PROCESS_INSTANCE;
+import static com.example.camunda.book.loan.workflow.model.ProcessInstance.RETURN_BOOK_PROCESS_INSTANCE;
 
 public class BpmnBookProcessor {
 
@@ -20,6 +21,13 @@ public class BpmnBookProcessor {
     public void loanBook(Book book){
         VariableMap variableMap = variableUtils.getVariables(book);
         runtimeService.createProcessInstanceByKey(LOAN_BOOK_PROCESS_INSTANCE.getName())
+                .setVariables(variableMap)
+                .execute();
+    }
+
+    public void returnBook(Book book){
+        VariableMap variableMap = variableUtils.getVariables(book);
+        runtimeService.createProcessInstanceByKey(RETURN_BOOK_PROCESS_INSTANCE.getName())
                 .setVariables(variableMap)
                 .execute();
     }

@@ -10,25 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-import static com.example.camunda.book.loan.workflow.delegate.Status.AVAILABLE;
+import static com.example.camunda.book.loan.workflow.delegate.BookLimit.MAX_BOOK_LIMIT;
 
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class LoanBook implements JavaDelegate {
+public class ReturnBook implements JavaDelegate {
 
     private final BookRepository bookRepository;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        boolean isAvailable = (boolean) execution.getVariable(String.valueOf(AVAILABLE).toLowerCase());
         String bookTitle = (String) execution.getVariable("title");
-        if(isAvailable){
-            log.info("Loan Accepted: {}", bookTitle);
-            Optional<Book> bookOptional = bookRepository.findByTitleIgnoreCase(bookTitle);
-            log.info("Book: {}, Stock book count: {}", bookTitle, bookOptional.get().getBookCount());
-            bookOptional.get().setBookCount(bookOptional.get().getBookCount()-1);
+        Optional<Book> bookOptional = bookRepository.findByTitleIgnoreCase(bookTitle);
+        if(!bookOptional.isPresent()){
+            log.info("Book '{}' does not belong to this library", bookTitle);
+            return;
+        }
+        if(bookOptional.get().getBookCount() < MAX_BOOK_LIMIT.getLimit()){
+            bookOptional.get().setBookCount(bookOptional.get().getBookCount()+1);
             bookRepository.save(bookOptional.get());
-            log.info("Book: {}, New remaining count: {}", bookTitle, bookOptional.get().getBookCount());
+            log.info("Book return successful for '{}'", bookTitle);
+            log.info("Stock count for '{}', {} book(s)", bookTitle, bookOptional.get().getBookCount());
+        } else {
+            log.info("Book return unsuccessful for '{}'", bookTitle);
         }
     }
+
 }

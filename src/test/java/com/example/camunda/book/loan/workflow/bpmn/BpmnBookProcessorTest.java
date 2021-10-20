@@ -1,5 +1,6 @@
-package com.example.camunda.book.loan;
+package com.example.camunda.book.loan.workflow.bpmn;
 
+import com.example.camunda.book.loan.BookLoanCamundaSpringBootApplication;
 import com.example.camunda.book.loan.workflow.model.Book;
 import com.example.camunda.book.loan.workflow.repository.BookRepository;
 import org.camunda.bpm.engine.ProcessEngine;
@@ -11,6 +12,7 @@ import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.extension.junit5.test.ProcessEngineExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,11 +31,11 @@ import static org.camunda.bpm.extension.mockito.CamundaMockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BookLoanCamundaSpringBootApplication.class)
-class BookLoanCamundaSpringBootApplicationTest {
+class BpmnBookProcessorTest {
 
     private final String LOAN_BOOK_PROCESS_INSTANCE = "book-loan-process";
     private final String END_ID = "end-loan-request";
-    private final String STOCK_CHECKER_DELEGATE_NAME = "stockChecker";
+    private final String STOCK_CHECKER_DELEGATE = "stockChecker";
 
     @RegisterExtension
     public ProcessEngineExtension processEngineExtension = ProcessEngineExtension.builder()
@@ -66,7 +68,7 @@ class BookLoanCamundaSpringBootApplicationTest {
     @Deployment(resources = {"book-loan.bpmn"})
     public void shouldAcceptBookLoansAndExecuteProvidedDelegates(String title, String expectedDelegateName, boolean availability){
         // Given
-        registerJavaDelegateMock(STOCK_CHECKER_DELEGATE_NAME);
+        registerJavaDelegateMock(STOCK_CHECKER_DELEGATE);
         registerJavaDelegateMock(expectedDelegateName);
         VariableMap variableMap = Variables.createVariables()
                 .putValue("title", title)
@@ -77,10 +79,28 @@ class BookLoanCamundaSpringBootApplicationTest {
 
         // Then
         assertThat(process).hasNotPassed(END_ID);
-        verifyJavaDelegateMock(STOCK_CHECKER_DELEGATE_NAME).executed();
+        verifyJavaDelegateMock(STOCK_CHECKER_DELEGATE).executed();
         verifyJavaDelegateMock(expectedDelegateName).executed();
     }
 
+    @Test
+    @Deployment(resources = {"book-loan.bpmn"})
+    public void shouldRejectBookLoan(){
+        // Given
+        final String REJECT_LOAN_DELEGATE = "rejectLoan";
+        registerJavaDelegateMock(STOCK_CHECKER_DELEGATE);
+        registerJavaDelegateMock(REJECT_LOAN_DELEGATE);
+        VariableMap variableMap = Variables.createVariables()
+                .putValue("title", "");
+
+        // When
+        ProcessInstance process = runtimeService.startProcessInstanceByKey(LOAN_BOOK_PROCESS_INSTANCE, variableMap);
+
+        // Then
+        assertThat(process).hasNotPassed(END_ID);
+        verifyJavaDelegateMock(STOCK_CHECKER_DELEGATE).executedNever();
+        verifyJavaDelegateMock(REJECT_LOAN_DELEGATE).executed();
+    }
 
     public static Stream<Arguments> autoBookLoans() {
         return Stream.of(

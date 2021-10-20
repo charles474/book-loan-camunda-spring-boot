@@ -2,10 +2,7 @@ package com.example.camunda.book.loan.workflow.config;
 
 import com.example.camunda.book.loan.BookLoanProcess;
 import com.example.camunda.book.loan.workflow.bpmn.BpmnBookProcessor;
-import com.example.camunda.book.loan.workflow.delegate.LoanBook;
-import com.example.camunda.book.loan.workflow.delegate.OutOfStock;
-import com.example.camunda.book.loan.workflow.delegate.RejectLoan;
-import com.example.camunda.book.loan.workflow.delegate.StockChecker;
+import com.example.camunda.book.loan.workflow.delegate.*;
 import com.example.camunda.book.loan.workflow.model.Book;
 import com.example.camunda.book.loan.workflow.repository.BookRepository;
 import com.example.camunda.book.loan.workflow.utils.VariableUtils;
@@ -33,8 +30,8 @@ public class Config {
     }
 
     @Bean
-    public LoanBook loanBook(){
-        return new LoanBook();
+    public LoanBook loanBook(BookRepository bookRepository){
+        return new LoanBook(bookRepository);
     }
 
     @Bean
@@ -50,6 +47,11 @@ public class Config {
     @Bean
     public StockChecker stockChecker(BookRepository bookRepository){
         return new StockChecker(bookRepository);
+    }
+
+    @Bean
+    public ReturnBook returnBook(BookRepository bookRepository){
+        return new ReturnBook(bookRepository);
     }
 
     @Bean
