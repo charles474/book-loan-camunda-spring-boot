@@ -3,7 +3,7 @@ package com.example.camunda.book.loan.workflow.controller
 import com.example.camunda.book.loan.workflow.bpmn.BpmnBookProcessor
 import spock.lang.Specification
 
-class BookRequestControllerTest extends Specification{
+class BookRequestControllerSpec extends Specification{
 
     def "should verify loan book method was invoked"(){
         given: "a mock of bpmn processor"

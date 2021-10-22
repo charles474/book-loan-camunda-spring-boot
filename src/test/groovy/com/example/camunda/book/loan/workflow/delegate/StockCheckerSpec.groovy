@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat
 
-class StockCheckerTest extends Specification{
+class StockCheckerSpec extends Specification{
 
     def logCaptor = LogCaptor.forClass(StockChecker.class);
 

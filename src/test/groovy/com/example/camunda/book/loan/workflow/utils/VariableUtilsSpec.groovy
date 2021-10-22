@@ -3,7 +3,7 @@ package com.example.camunda.book.loan.workflow.utils
 import com.example.camunda.book.loan.workflow.model.Book
 import spock.lang.Specification
 
-class VariableUtilsTest extends Specification{
+class VariableUtilsSpec extends Specification{
 
     final VariableUtils variableUtils = new VariableUtils();
 

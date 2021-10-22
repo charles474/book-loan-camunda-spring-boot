@@ -16,7 +16,7 @@ import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.reposit
 import static org.camunda.bpm.extension.mockito.CamundaMockito.registerJavaDelegateMock
 import static org.camunda.bpm.extension.mockito.CamundaMockito.verifyJavaDelegateMock
 
-class BpmnBookProcessorTest extends Specification implements UnitTestingHelpers, BpmnFluentBuilder{
+class BpmnBookProcessorSpec extends Specification implements UnitTestingHelpers, BpmnFluentBuilder{
 
     final String bookLoanProcessInstance = "book-loan-process";
     final String bookReturnProcessInstance = "book-return-process";

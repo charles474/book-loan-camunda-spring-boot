@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat
 
-class LoanBookTest extends Specification{
+class LoanBookSpec extends Specification{
 
     def logCaptor = LogCaptor.forClass(LoanBook.class);
 
