@@ -2,7 +2,6 @@ package com.example.camunda.book.loan.workflow.bpmn
 
 import io.digitalstate.camunda.unittest.UnitTestingHelpers
 import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration
-import org.camunda.bpm.engine.repository.DeploymentBuilder
 import org.camunda.bpm.engine.runtime.ProcessInstance
 import org.camunda.bpm.engine.test.ProcessEngineRule
 import org.camunda.bpm.engine.variable.VariableMap
@@ -37,7 +36,7 @@ class BpmnBookProcessorTest extends Specification implements UnitTestingHelpers,
 
     def cleanupSpec(){
         def deploymentId = getSharedData("deploymentId")
-        repositoryService().deleteDeployment(deploymentId)
+        repositoryService().deleteDeployment(deploymentId,true, true, true);
         println "Deployment ID: '${deploymentId}' has been deleted"
     }
 
@@ -92,4 +91,22 @@ class BpmnBookProcessorTest extends Specification implements UnitTestingHelpers,
             "A Tale of Two Cities" | "outOfStock" | false
     }
 
+    def "should check book-return.bpmn deployed, and is not ended"(String title){
+        given: "variables for process instance"
+            VariableMap variables = Variables.createVariables()
+                .putValue("title", title);
+
+        when: "creating an instance of book-return.bpmn"
+            ProcessInstance processInstance = runtimeService().startProcessInstanceByKey(bookReturnProcessInstance, variables);
+
+        then: "process has ended, delegates executed"
+            assertThat(processInstance).isActive();
+
+        where:
+            title | _
+            "Alice In Wonderland" | _
+            "Oliver Twist" | _
+            "A Tale of Two Cities" | _
+
+    }
 }

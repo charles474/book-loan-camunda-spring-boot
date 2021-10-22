@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat
 
-class ReturnBookTest extends Specification{
+class ReturnBookSpec extends Specification{
 
     def bookTitle = "Alice In Wonderland";
 

@@ -3,7 +3,7 @@ package com.example.camunda.book.loan.workflow.repository
 import com.example.camunda.book.loan.workflow.model.Book
 import spock.lang.Specification
 
-class BookRepositoryTest extends Specification{
+class BookRepositorySpec extends Specification{
 
     def 'should find book by title'(String title){
         given: "a book object is supplied"

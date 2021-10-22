@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat
 
-class RejectLoanTest extends Specification{
+class RejectLoanSpec extends Specification{
 
     def logCaptor = LogCaptor.forClass(RejectLoan.class);
 
