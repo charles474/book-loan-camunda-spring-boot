@@ -25,6 +25,7 @@ public class LoanBook implements JavaDelegate {
         if(isAvailable){
             log.info("Loan Accepted: {}", bookTitle);
             Optional<Book> bookOptional = bookRepository.findByTitleIgnoreCase(bookTitle);
+            execution.setVariable("stockCount", bookOptional.get().getBookCount());
             log.info("Book: {}, Stock book count: {}", bookTitle, bookOptional.get().getBookCount());
             bookOptional.get().setBookCount(bookOptional.get().getBookCount()-1);
             bookRepository.save(bookOptional.get());
