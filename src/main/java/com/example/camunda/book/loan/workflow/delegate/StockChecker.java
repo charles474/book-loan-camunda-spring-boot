@@ -22,6 +22,7 @@ public class StockChecker implements JavaDelegate {
         log.info("Checking stock for Book: {}", bookTitle);
         Optional<Book> bookOptional = bookRepository.findByTitleIgnoreCase(bookTitle);
         execution.setVariable("available", isBookAvailableToLoan(bookOptional));
+        execution.setVariable("found", (bookOptional.isPresent() ? true : false));
     }
 
     private boolean isBookAvailableToLoan(Optional<Book> bookOptional){
