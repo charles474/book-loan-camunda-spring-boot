@@ -19,10 +19,11 @@ public class OrderBook implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         String bookTitle = (String) execution.getVariable("title");
+        Integer orderCount = Long.valueOf((Long) execution.getVariable("orderCount")).intValue();
         if(bookTitle == null){
             log.info("Unable to order book '{}', title is invalid", (Object) null);
         } else {
-            bookRepository.save(new Book(bookTitle, MAX_BOOK_LIMIT.getLimit()));
+            bookRepository.save(new Book(bookTitle, (orderCount > MAX_BOOK_LIMIT.getLimit()? MAX_BOOK_LIMIT.getLimit() : orderCount)));
             log.info("Added book: {} to library", bookTitle);
         }
     }
