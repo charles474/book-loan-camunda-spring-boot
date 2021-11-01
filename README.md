@@ -29,6 +29,7 @@ The process in this case is simple, it will look at the `title` value coming fro
   * If the requested book is found and is in stock, a message is displayed.
   * If the requested book is found and is no longer in stock, a message is displayed.
 * If the title is empty, it will reject the book loan.
+* If the requested book cannot be found in the library, it will simulate the process or ordering the book into to library. 
 
 Java Delegates are used for some business logic rather than a decision table.
 
@@ -38,7 +39,14 @@ This repository exposes a URL endpoint for receiving a request using an API appl
 
 ---
 
-Send a http `POST` request to `http://localhost:8080/v1/loanBook` with a `JSON` request body as shown below:
+Send a http `GET` request to `http://localhost:8080/v1/loanBook` with a `JSON` request body as shown below:
+```json
+{
+  "title": "Alice In Wonderland"
+}
+```
+
+Send a http `POST` request to `http://localhost:8080/v1/returnBook` with a `JSON` request body as shown below:
 ```json
 {
   "title": "Alice In Wonderland"

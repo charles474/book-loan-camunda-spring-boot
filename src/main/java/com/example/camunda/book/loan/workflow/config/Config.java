@@ -11,6 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.example.camunda.book.loan.workflow.delegate.BookLimit.MAX_BOOK_LIMIT;
+
 @Configuration
 public class Config {
 
@@ -32,6 +34,11 @@ public class Config {
     @Bean
     public LoanBook loanBook(BookRepository bookRepository){
         return new LoanBook(bookRepository);
+    }
+
+    @Bean
+    public OrderBook orderBook(BookRepository bookRepository){
+        return new OrderBook(bookRepository);
     }
 
     @Bean
@@ -58,9 +65,9 @@ public class Config {
     public CommandLineRunner commandLineRunner (BookRepository bookRepository){
         // Pre-populate our in-memory DB
         return args -> {
-            Book aliceInWonderland= new Book("Alice In Wonderland", 3);
-            Book oliverTwist = new Book("Oliver Twist", 2);
-            Book aTaleOfTwoCities= new Book("A Tale Of Two Cities", 5);
+            Book aliceInWonderland= new Book("Alice In Wonderland", MAX_BOOK_LIMIT.getLimit());
+            Book oliverTwist = new Book("Oliver Twist", MAX_BOOK_LIMIT.getLimit());
+            Book aTaleOfTwoCities= new Book("A Tale Of Two Cities", MAX_BOOK_LIMIT.getLimit());
             bookRepository.save(aliceInWonderland);
             bookRepository.save(oliverTwist);
             bookRepository.save(aTaleOfTwoCities);

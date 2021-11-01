@@ -29,7 +29,7 @@ public class LoanBook implements JavaDelegate {
             log.info("Book: {}, Stock book count: {}", bookTitle, bookOptional.get().getBookCount());
             bookOptional.get().setBookCount(bookOptional.get().getBookCount()-1);
             bookRepository.save(bookOptional.get());
-            log.info("Book: {}, New remaining count: {}", bookTitle, bookOptional.get().getBookCount());
+            log.info("Book: {}, Remaining count: {}", bookTitle, bookOptional.get().getBookCount());
         }
     }
 }

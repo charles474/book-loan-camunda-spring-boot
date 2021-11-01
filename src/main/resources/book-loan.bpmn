@@ -32,16 +32,9 @@
       <bpmn:outgoing>Flow_1dgia5y</bpmn:outgoing>
       <bpmn:outgoing>Flow_1k5j245</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1k5j245" name="Title Not Provided" sourceRef="Gateway_1selps7" targetRef="Activity_18yvy76">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${title == ""}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0l7k2nh" name="Not Available" sourceRef="Gateway_1xh4778" targetRef="Activity_146znvf">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!available}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Activity_18yvy76" name="Reject Book Loan" camunda:delegateExpression="#{rejectLoan}">
-      <bpmn:incoming>Flow_1k5j245</bpmn:incoming>
-      <bpmn:outgoing>Flow_0deuofw</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:serviceTask id="Activity_146znvf" name="Out Of Stock" camunda:delegateExpression="#{outOfStock}">
       <bpmn:incoming>Flow_0l7k2nh</bpmn:incoming>
       <bpmn:outgoing>Flow_1xkomvm</bpmn:outgoing>
@@ -76,118 +69,149 @@
     <bpmn:sequenceFlow id="Flow_1tkiqpy" name="Not Approved" sourceRef="Gateway_0zmjfes" targetRef="approve-book-request">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!approveBookRequest}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:boundaryEvent id="Event_06w08aw" attachedToRef="book-stock-check">
+      <bpmn:outgoing>Flow_0cerlk6</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1c1v0pz" errorRef="Error_1islq4e" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0cerlk6" sourceRef="Event_06w08aw" targetRef="order-book-msg" />
+    <bpmn:endEvent id="order-book-msg" name="Order book">
+      <bpmn:incoming>Flow_0cerlk6</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_190rbcn" camunda:delegateExpression="#{orderBook}" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_18yvy76" name="Reject Book Loan" camunda:delegateExpression="#{rejectLoan}">
+      <bpmn:incoming>Flow_1k5j245</bpmn:incoming>
+      <bpmn:outgoing>Flow_0deuofw</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1k5j245" name="Title Not Provided" sourceRef="Gateway_1selps7" targetRef="Activity_18yvy76">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${title == ""}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0deuofw" sourceRef="Activity_18yvy76" targetRef="end-loan-request" />
   </bpmn:process>
+  <bpmn:error id="Error_1islq4e" name="Book_not_found(id=Error_2bnfo53)" errorCode="BOOK_NOT_FOUND" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="book-loan-process">
       <bpmndi:BPMNEdge id="Flow_0deuofw_di" bpmnElement="Flow_0deuofw">
-        <di:waypoint x="570" y="480" />
-        <di:waypoint x="1480" y="480" />
-        <di:waypoint x="1480" y="187" />
-        <di:waypoint x="1458" y="187" />
+        <di:waypoint x="570" y="530" />
+        <di:waypoint x="1480" y="530" />
+        <di:waypoint x="1480" y="237" />
+        <di:waypoint x="1458" y="237" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tkiqpy_di" bpmnElement="Flow_1tkiqpy">
-        <di:waypoint x="1240" y="162" />
-        <di:waypoint x="1240" y="100" />
-        <di:waypoint x="1070" y="100" />
-        <di:waypoint x="1070" y="147" />
+        <di:waypoint x="1240" y="212" />
+        <di:waypoint x="1240" y="150" />
+        <di:waypoint x="1070" y="150" />
+        <di:waypoint x="1070" y="197" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1121" y="82" width="68" height="14" />
+          <dc:Bounds x="1121" y="132" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_00l45ry_di" bpmnElement="Flow_00l45ry">
-        <di:waypoint x="1265" y="187" />
-        <di:waypoint x="1422" y="187" />
+        <di:waypoint x="1265" y="237" />
+        <di:waypoint x="1422" y="237" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1320" y="169" width="47" height="14" />
+          <dc:Bounds x="1320" y="219" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lk49dc_di" bpmnElement="Flow_1lk49dc">
-        <di:waypoint x="1120" y="187" />
-        <di:waypoint x="1215" y="187" />
+        <di:waypoint x="1120" y="237" />
+        <di:waypoint x="1215" y="237" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_19eyflt_di" bpmnElement="Flow_19eyflt">
-        <di:waypoint x="930" y="187" />
-        <di:waypoint x="1020" y="187" />
+        <di:waypoint x="930" y="237" />
+        <di:waypoint x="1020" y="237" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ewqx81_di" bpmnElement="Flow_0ewqx81">
-        <di:waypoint x="725" y="187" />
-        <di:waypoint x="830" y="187" />
+        <di:waypoint x="725" y="237" />
+        <di:waypoint x="830" y="237" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="756" y="169" width="44" height="14" />
+          <dc:Bounds x="756" y="219" width="44" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1xkomvm_di" bpmnElement="Flow_1xkomvm">
-        <di:waypoint x="980" y="380" />
-        <di:waypoint x="1440" y="380" />
-        <di:waypoint x="1440" y="205" />
+        <di:waypoint x="980" y="430" />
+        <di:waypoint x="1440" y="430" />
+        <di:waypoint x="1440" y="255" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0l7k2nh_di" bpmnElement="Flow_0l7k2nh">
-        <di:waypoint x="700" y="212" />
-        <di:waypoint x="700" y="380" />
-        <di:waypoint x="880" y="380" />
+        <di:waypoint x="700" y="262" />
+        <di:waypoint x="700" y="430" />
+        <di:waypoint x="880" y="430" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="765" y="363" width="65" height="14" />
+          <dc:Bounds x="765" y="413" width="65" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1k5j245_di" bpmnElement="Flow_1k5j245">
-        <di:waypoint x="290" y="212" />
-        <di:waypoint x="290" y="480" />
-        <di:waypoint x="470" y="480" />
+        <di:waypoint x="290" y="262" />
+        <di:waypoint x="290" y="530" />
+        <di:waypoint x="470" y="530" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="336" y="463" width="88" height="14" />
+          <dc:Bounds x="336" y="513" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dgia5y_di" bpmnElement="Flow_1dgia5y">
-        <di:waypoint x="315" y="187" />
-        <di:waypoint x="440" y="187" />
+        <di:waypoint x="315" y="237" />
+        <di:waypoint x="440" y="237" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="337" y="169" width="68" height="14" />
+          <dc:Bounds x="337" y="219" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ibt9yz_di" bpmnElement="Flow_0ibt9yz">
-        <di:waypoint x="540" y="187" />
-        <di:waypoint x="675" y="187" />
+        <di:waypoint x="540" y="237" />
+        <di:waypoint x="675" y="237" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0eo27fu_di" bpmnElement="Flow_0eo27fu">
-        <di:waypoint x="178" y="187" />
-        <di:waypoint x="265" y="187" />
+        <di:waypoint x="178" y="237" />
+        <di:waypoint x="265" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cerlk6_di" bpmnElement="Flow_0cerlk6">
+        <di:waypoint x="510" y="179" />
+        <di:waypoint x="510" y="140" />
+        <di:waypoint x="602" y="140" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="book-loan-request">
-        <dc:Bounds x="142" y="169" width="36" height="36" />
+        <dc:Bounds x="142" y="219" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="134" y="212" width="53" height="27" />
+          <dc:Bounds x="134" y="262" width="53" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1xh4778_di" bpmnElement="Gateway_1xh4778" isMarkerVisible="true">
-        <dc:Bounds x="675" y="162" width="50" height="50" />
+        <dc:Bounds x="675" y="212" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_17oz9pi_di" bpmnElement="end-loan-request">
-        <dc:Bounds x="1422" y="169" width="36" height="36" />
+        <dc:Bounds x="1422" y="219" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1402" y="132" width="76" height="27" />
+          <dc:Bounds x="1402" y="182" width="76" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1n9rzln_di" bpmnElement="loan-book">
-        <dc:Bounds x="830" y="147" width="100" height="80" />
+        <dc:Bounds x="830" y="197" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0646pij_di" bpmnElement="book-stock-check">
-        <dc:Bounds x="440" y="147" width="100" height="80" />
+        <dc:Bounds x="440" y="197" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1hs0mmv_di" bpmnElement="Gateway_1selps7" isMarkerVisible="true">
-        <dc:Bounds x="265" y="162" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_146znvf_di" bpmnElement="Activity_146znvf">
-        <dc:Bounds x="880" y="340" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0tumje7_di" bpmnElement="approve-book-request">
-        <dc:Bounds x="1020" y="147" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0zmjfes_di" bpmnElement="Gateway_0zmjfes" isMarkerVisible="true">
-        <dc:Bounds x="1215" y="162" width="50" height="50" />
+        <dc:Bounds x="265" y="212" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_18yvy76_di" bpmnElement="Activity_18yvy76">
-        <dc:Bounds x="470" y="440" width="100" height="80" />
+        <dc:Bounds x="470" y="490" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_146znvf_di" bpmnElement="Activity_146znvf">
+        <dc:Bounds x="880" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tumje7_di" bpmnElement="approve-book-request">
+        <dc:Bounds x="1020" y="197" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0zmjfes_di" bpmnElement="Gateway_0zmjfes" isMarkerVisible="true">
+        <dc:Bounds x="1215" y="212" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08mw68u_di" bpmnElement="order-book-msg">
+        <dc:Bounds x="602" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="592" y="165" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gc5dc0_di" bpmnElement="Event_06w08aw">
+        <dc:Bounds x="492" y="179" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
