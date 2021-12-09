@@ -1,7 +1,5 @@
 # Camunda Spring Boot Book Loan
-
 ---
-
 
 This repo is another one of my novice attempt at implementing a Spring boot Java Application created from 
 [Camunda quick start guide](https://docs.camunda.org/get-started/). The difference between 
